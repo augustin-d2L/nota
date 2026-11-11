@@ -20,3 +20,10 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
+
+      - name: Ensure domain layer is pure Dart
+        run: |
+          if grep -rnE "package:flutter|dart:ui" lib/domain; then
+            echo "::error::lib/domain must not depend on Flutter"
+            exit 1
+          fi
