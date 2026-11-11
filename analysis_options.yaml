@@ -9,6 +9,8 @@ analyzer:
     strict-raw-types: true
   exclude:
     - build/**
+    - android/**
+    - ios/**
 
 # Extra rules on top of flutter_lints. Full list: https://dart.dev/lints
 linter:
