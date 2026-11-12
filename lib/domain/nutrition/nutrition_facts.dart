@@ -24,4 +24,22 @@ final class NutritionFacts {
       throw ArgumentError.value(value, name, 'must be finite and >= 0');
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is NutritionFacts &&
+      other.energyKcal == energyKcal &&
+      other.energyKj == energyKj &&
+      other.proteinG == proteinG &&
+      other.carbohydratesG == carbohydratesG &&
+      other.fatG == fatG;
+
+  @override
+  int get hashCode =>
+      Object.hash(energyKcal, energyKj, proteinG, carbohydratesG, fatG);
+
+  @override
+  String toString() =>
+      'NutritionFacts(energyKcal: $energyKcal, energyKj: $energyKj, '
+      'proteinG: $proteinG, carbohydratesG: $carbohydratesG, fatG: $fatG)';
 }
