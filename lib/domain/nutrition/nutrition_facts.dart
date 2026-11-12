@@ -1,3 +1,5 @@
+import 'package:nota/domain/nutrition/energy.dart';
+
 final class NutritionFacts {
   NutritionFacts({
     required this.energyKcal,
@@ -11,6 +13,39 @@ final class NutritionFacts {
     _checkAmount(proteinG, 'proteinG');
     _checkAmount(carbohydratesG, 'carbohydratesG');
     _checkAmount(fatG, 'fatG');
+  }
+
+  /// Builds facts from a nutrition label.
+  ///
+  /// [per] is the label's reference amount: 100 for "per 100 g", 30 for "per 30 g serving".
+  factory NutritionFacts.fromLabel({
+    required double per,
+    double? energyKcal,
+    double? energyKj,
+    required double proteinG,
+    required double carbohydratesG,
+    required double fatG,
+  }) {
+    if (!per.isFinite || per <= 0) {
+      throw ArgumentError.value(per, 'per', 'must be finite and > 0');
+    }
+
+    final (kcal, kj) = switch ((energyKcal, energyKj)) {
+      (final c?, final j?) => (c, j),
+      (final c?, null) => (c, kcalToKj(c)),
+      (null, final j?) => (kjToKcal(j), j),
+      (null, null) => throw ArgumentError('energyKcal or energyKj is required'),
+    };
+
+    final factor = 100 / per;
+
+    return NutritionFacts(
+      energyKcal: kcal * factor,
+      energyKj: kj * factor,
+      proteinG: proteinG * factor,
+      carbohydratesG: carbohydratesG * factor,
+      fatG: fatG * factor,
+    );
   }
 
   final double energyKcal;
