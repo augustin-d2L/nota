@@ -175,5 +175,26 @@ void main() {
         expect(() => a.amountFor(-1), throwsArgumentError);
       });
     });
+    group('on Iterable', () {
+      test('returns zero for an empty list', () {
+        expect(<NutrientAmounts>[].sum(), NutrientAmounts.zero);
+      });
+      test('adds every element field by field', () {
+        final items = [
+          _amounts(kcal: 100, kj: 418, protein: 1, carbs: 2, fat: 3),
+          _amounts(kcal: 200, kj: 837, protein: 4, carbs: 5, fat: 6),
+          _amounts(kcal: 50, kj: 209, protein: 7, carbs: 8, fat: 9),
+        ];
+
+        _expectAmounts(
+          items.sum(),
+          energyKcal: 350,
+          energyKj: 1464,
+          proteinG: 12,
+          carbohydratesG: 15,
+          fatG: 18,
+        );
+      });
+    });
   });
 }

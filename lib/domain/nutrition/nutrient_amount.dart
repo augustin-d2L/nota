@@ -68,3 +68,8 @@ final class NutrientAmounts {
       'NutrientAmounts(energyKcal: $energyKcal, energyKj: $energyKj, '
       'proteinG: $proteinG, carbohydratesG: $carbohydratesG, fatG: $fatG)';
 }
+
+extension NutrientAmountsSum on Iterable<NutrientAmounts> {
+  NutrientAmounts sum() =>
+      fold(NutrientAmounts.zero, (total, item) => total + item);
+}
