@@ -1,4 +1,5 @@
 import 'package:nota/domain/nutrition/energy.dart';
+import 'package:nota/domain/nutrition/nutrient_validation.dart';
 
 final class NutritionFacts {
   NutritionFacts({
@@ -8,11 +9,11 @@ final class NutritionFacts {
     required this.carbohydratesG,
     required this.fatG,
   }) {
-    _checkAmount(energyKcal, 'energyKcal');
-    _checkAmount(energyKj, 'energyKj');
-    _checkAmount(proteinG, 'proteinG');
-    _checkAmount(carbohydratesG, 'carbohydratesG');
-    _checkAmount(fatG, 'fatG');
+    checkNutrientValue(energyKcal, 'energyKcal');
+    checkNutrientValue(energyKj, 'energyKj');
+    checkNutrientValue(proteinG, 'proteinG');
+    checkNutrientValue(carbohydratesG, 'carbohydratesG');
+    checkNutrientValue(fatG, 'fatG');
   }
 
   /// Builds facts from a nutrition label.
@@ -53,12 +54,6 @@ final class NutritionFacts {
   final double proteinG;
   final double carbohydratesG;
   final double fatG;
-
-  static void _checkAmount(double value, String name) {
-    if (!value.isFinite || value < 0) {
-      throw ArgumentError.value(value, name, 'must be finite and >= 0');
-    }
-  }
 
   @override
   bool operator ==(Object other) =>
