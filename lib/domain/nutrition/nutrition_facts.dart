@@ -27,9 +27,7 @@ final class NutritionFacts {
     required double carbohydratesG,
     required double fatG,
   }) {
-    if (!per.isFinite || per <= 0) {
-      throw ArgumentError.value(per, 'per', 'must be finite and > 0');
-    }
+    checkNutrientValue(per, 'per');
 
     final (kcal, kj) = switch ((energyKcal, energyKj)) {
       (final c?, final j?) => (c, j),

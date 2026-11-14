@@ -130,5 +130,50 @@ void main() {
         );
       });
     });
+    group('amountFor', () {
+      final NutrientAmounts a = NutrientAmounts(
+        energyKcal: 400,
+        energyKj: 1674,
+        proteinG: 10,
+        carbohydratesG: 50,
+        fatG: 16,
+      );
+      test('scales correctly', () {
+        _expectAmounts(
+          a.amountFor(150),
+          energyKcal: 600,
+          energyKj: 2511,
+          proteinG: 15,
+          carbohydratesG: 75,
+          fatG: 24,
+        );
+      });
+      test('does not change for quantity = 100', () {
+        _expectAmounts(
+          a.amountFor(100),
+          energyKcal: a.energyKcal,
+          energyKj: a.energyKj,
+          proteinG: a.proteinG,
+          carbohydratesG: a.carbohydratesG,
+          fatG: a.fatG,
+        );
+      });
+      test('scales small quantity correctly', () {
+        _expectAmounts(
+          a.amountFor(2.5),
+          energyKcal: a.energyKcal / 40,
+          energyKj: a.energyKj / 40,
+          proteinG: a.proteinG / 40,
+          carbohydratesG: a.carbohydratesG / 40,
+          fatG: a.fatG / 40,
+        );
+      });
+      test('gives zero for zero quantity', () {
+        expect(a.amountFor(0), NutrientAmounts.zero);
+      });
+      test('throw error for negative quantity', () {
+        expect(() => a.amountFor(-1), throwsArgumentError);
+      });
+    });
   });
 }
