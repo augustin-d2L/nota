@@ -16,38 +16,13 @@ final class NutrientAmounts {
     checkNutrientValue(fatG, 'fatG');
   }
 
-  /// Builds facts from a nutrition label.
-  ///
-  /// [per] is the label's reference amount: 100 for "per 100 g", 30 for "per 30 g serving".
-  factory NutrientAmounts.fromLabel({
-    required double per,
-    double? energyKcal,
-    double? energyKj,
-    required double proteinG,
-    required double carbohydratesG,
-    required double fatG,
-  }) {
-    if (!per.isFinite || per <= 0) {
-      throw ArgumentError.value(per, 'per', 'must be finite and > 0');
-    }
-
-    final (kcal, kj) = switch ((energyKcal, energyKj)) {
-      (final c?, final j?) => (c, j),
-      (final c?, null) => (c, kcalToKj(c)),
-      (null, final j?) => (kjToKcal(j), j),
-      (null, null) => throw ArgumentError('energyKcal or energyKj is required'),
-    };
-
-    final factor = 100 / per;
-
-    return NutrientAmounts(
-      energyKcal: kcal * factor,
-      energyKj: kj * factor,
-      proteinG: proteinG * factor,
-      carbohydratesG: carbohydratesG * factor,
-      fatG: fatG * factor,
-    );
-  }
+  static final zero = NutrientAmounts(
+    energyKcal: 0,
+    energyKj: 0,
+    proteinG: 0,
+    carbohydratesG: 0,
+    fatG: 0,
+  );
 
   final double energyKcal;
   final double energyKj;
@@ -63,6 +38,14 @@ final class NutrientAmounts {
       other.proteinG == proteinG &&
       other.carbohydratesG == carbohydratesG &&
       other.fatG == fatG;
+
+  NutrientAmounts operator +(NutrientAmounts other) => NutrientAmounts(
+    energyKcal: energyKcal + other.energyKcal,
+    energyKj: energyKj + other.energyKj,
+    proteinG: proteinG + other.proteinG,
+    carbohydratesG: carbohydratesG + other.carbohydratesG,
+    fatG: fatG + other.fatG,
+  );
 
   @override
   int get hashCode =>

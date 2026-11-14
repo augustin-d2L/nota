@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nota/domain/nutrition/nutrient_amount.dart';
 
+const _tolerance = 1e-9;
+
 NutrientAmounts _amounts({
   double kcal = 0,
   double kj = 0,
@@ -14,6 +16,29 @@ NutrientAmounts _amounts({
   carbohydratesG: carbs,
   fatG: fat,
 );
+
+void _expectAmounts(
+  NutrientAmounts amounts, {
+  required double energyKcal,
+  required double energyKj,
+  required double proteinG,
+  required double carbohydratesG,
+  required double fatG,
+}) {
+  expect(
+    amounts.energyKcal,
+    closeTo(energyKcal, _tolerance),
+    reason: 'energyKcal',
+  );
+  expect(amounts.energyKj, closeTo(energyKj, _tolerance), reason: 'energyKj');
+  expect(amounts.proteinG, closeTo(proteinG, _tolerance), reason: 'proteinG');
+  expect(
+    amounts.carbohydratesG,
+    closeTo(carbohydratesG, _tolerance),
+    reason: 'carbohydratesG',
+  );
+  expect(amounts.fatG, closeTo(fatG, _tolerance), reason: 'fatG');
+}
 
 final _fieldBuilders = <String, NutrientAmounts Function(double)>{
   'energyKcal': (value) => _amounts(kcal: value),
@@ -59,6 +84,50 @@ void main() {
         final b = _amounts();
         expect(a, equals(b));
         expect(a.hashCode, b.hashCode);
+      });
+    });
+    group('addition', () {
+      test('adds each fields', () {
+        final NutrientAmounts a = _amounts(
+          kcal: 10,
+          kj: 10,
+          protein: 10,
+          carbs: 10,
+          fat: 10,
+        );
+        final NutrientAmounts b = _amounts(
+          kcal: 10,
+          kj: 10,
+          protein: 10,
+          carbs: 10,
+          fat: 10,
+        );
+        _expectAmounts(
+          a + b,
+          energyKcal: a.energyKcal + b.energyKcal,
+          energyKj: a.energyKj + b.energyKj,
+          proteinG: a.proteinG + b.proteinG,
+          carbohydratesG: a.carbohydratesG + b.carbohydratesG,
+          fatG: a.fatG + b.fatG,
+        );
+      });
+      test('does not move with 0', () {
+        final NutrientAmounts a = _amounts(
+          kcal: 10,
+          kj: 10,
+          protein: 10,
+          carbs: 10,
+          fat: 10,
+        );
+        final NutrientAmounts b = _amounts();
+        _expectAmounts(
+          a + b,
+          energyKcal: a.energyKcal,
+          energyKj: a.energyKj,
+          proteinG: a.proteinG,
+          carbohydratesG: a.carbohydratesG,
+          fatG: a.fatG,
+        );
       });
     });
   });
