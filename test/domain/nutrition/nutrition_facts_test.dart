@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:nota/domain/nutrition/nutrient_amount.dart';
 import 'package:nota/domain/nutrition/nutrition_facts.dart';
 
-const _tolerance = 1e-9;
+import 'nutrient_matchers.dart';
 
 NutritionFacts _buildFacts({
   double energyKcal = 400,
@@ -18,29 +18,6 @@ NutritionFacts _buildFacts({
     carbohydratesG: carbohydratesG,
     fatG: fatG,
   );
-}
-
-void _expectFacts(
-  NutritionFacts facts, {
-  required double energyKcal,
-  required double energyKj,
-  required double proteinG,
-  required double carbohydratesG,
-  required double fatG,
-}) {
-  expect(
-    facts.energyKcal,
-    closeTo(energyKcal, _tolerance),
-    reason: 'energyKcal',
-  );
-  expect(facts.energyKj, closeTo(energyKj, _tolerance), reason: 'energyKj');
-  expect(facts.proteinG, closeTo(proteinG, _tolerance), reason: 'proteinG');
-  expect(
-    facts.carbohydratesG,
-    closeTo(carbohydratesG, _tolerance),
-    reason: 'carbohydratesG',
-  );
-  expect(facts.fatG, closeTo(fatG, _tolerance), reason: 'fatG');
 }
 
 final _fieldBuilders = <String, NutritionFacts Function(double)>{
@@ -102,7 +79,7 @@ void main() {
           carbohydratesG: 12.5,
           fatG: 4,
         );
-        _expectFacts(
+        expectFacts(
           facts,
           energyKcal: 400,
           energyKj: 1680,
@@ -120,7 +97,7 @@ void main() {
           carbohydratesG: 15,
           fatG: 5,
         );
-        _expectFacts(
+        expectFacts(
           facts,
           energyKcal: 400,
           energyKj: 400 * 4.184,
@@ -139,7 +116,7 @@ void main() {
           energyKcal: 250,
           energyKj: 1050,
         );
-        _expectFacts(
+        expectFacts(
           facts,
           energyKcal: 250,
           energyKj: 1050,
@@ -157,7 +134,7 @@ void main() {
           fatG: 10,
           energyKcal: 400,
         );
-        _expectFacts(
+        expectFacts(
           facts,
           energyKcal: 400,
           energyKj: 1673.6,
@@ -175,7 +152,7 @@ void main() {
           fatG: 10,
           energyKj: 1673.6,
         );
-        _expectFacts(
+        expectFacts(
           facts,
           energyKcal: 400,
           energyKj: 1673.6,
@@ -212,6 +189,45 @@ void main() {
             );
           });
         }
+      });
+    });
+    group('amountFor', () {
+      final facts = _buildFacts();
+      test('scales correctly', () {
+        expectAmounts(
+          facts.amountFor(150),
+          energyKcal: 600,
+          energyKj: 2511,
+          proteinG: 15,
+          carbohydratesG: 75,
+          fatG: 24,
+        );
+      });
+      test('does not change for quantity = 100', () {
+        expectAmounts(
+          facts.amountFor(100),
+          energyKcal: facts.energyKcal,
+          energyKj: facts.energyKj,
+          proteinG: facts.proteinG,
+          carbohydratesG: facts.carbohydratesG,
+          fatG: facts.fatG,
+        );
+      });
+      test('scales small quantity correctly', () {
+        expectAmounts(
+          facts.amountFor(2.5),
+          energyKcal: facts.energyKcal / 40,
+          energyKj: facts.energyKj / 40,
+          proteinG: facts.proteinG / 40,
+          carbohydratesG: facts.carbohydratesG / 40,
+          fatG: facts.fatG / 40,
+        );
+      });
+      test('gives zero for zero quantity', () {
+        expect(facts.amountFor(0), NutrientAmounts.zero);
+      });
+      test('throw error for negative quantity', () {
+        expect(() => facts.amountFor(-1), throwsArgumentError);
       });
     });
   });

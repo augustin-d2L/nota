@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nota/domain/nutrition/nutrient_amount.dart';
 
-const _tolerance = 1e-9;
+import 'nutrient_matchers.dart';
 
 NutrientAmounts _amounts({
   double kcal = 0,
@@ -16,29 +16,6 @@ NutrientAmounts _amounts({
   carbohydratesG: carbs,
   fatG: fat,
 );
-
-void _expectAmounts(
-  NutrientAmounts amounts, {
-  required double energyKcal,
-  required double energyKj,
-  required double proteinG,
-  required double carbohydratesG,
-  required double fatG,
-}) {
-  expect(
-    amounts.energyKcal,
-    closeTo(energyKcal, _tolerance),
-    reason: 'energyKcal',
-  );
-  expect(amounts.energyKj, closeTo(energyKj, _tolerance), reason: 'energyKj');
-  expect(amounts.proteinG, closeTo(proteinG, _tolerance), reason: 'proteinG');
-  expect(
-    amounts.carbohydratesG,
-    closeTo(carbohydratesG, _tolerance),
-    reason: 'carbohydratesG',
-  );
-  expect(amounts.fatG, closeTo(fatG, _tolerance), reason: 'fatG');
-}
 
 final _fieldBuilders = <String, NutrientAmounts Function(double)>{
   'energyKcal': (value) => _amounts(kcal: value),
@@ -55,7 +32,7 @@ const _invalidValues = <String, double>{
 };
 
 void main() {
-  group('NutritionAmounts', () {
+  group('NutrientAmounts', () {
     group('constructors', () {
       for (final field in _fieldBuilders.entries) {
         group(field.key, () {
@@ -102,7 +79,7 @@ void main() {
           carbs: 10,
           fat: 10,
         );
-        _expectAmounts(
+        expectAmounts(
           a + b,
           energyKcal: a.energyKcal + b.energyKcal,
           energyKj: a.energyKj + b.energyKj,
@@ -120,7 +97,7 @@ void main() {
           fat: 10,
         );
         final NutrientAmounts b = _amounts();
-        _expectAmounts(
+        expectAmounts(
           a + b,
           energyKcal: a.energyKcal,
           energyKj: a.energyKj,
@@ -130,51 +107,7 @@ void main() {
         );
       });
     });
-    group('amountFor', () {
-      final NutrientAmounts a = NutrientAmounts(
-        energyKcal: 400,
-        energyKj: 1674,
-        proteinG: 10,
-        carbohydratesG: 50,
-        fatG: 16,
-      );
-      test('scales correctly', () {
-        _expectAmounts(
-          a.amountFor(150),
-          energyKcal: 600,
-          energyKj: 2511,
-          proteinG: 15,
-          carbohydratesG: 75,
-          fatG: 24,
-        );
-      });
-      test('does not change for quantity = 100', () {
-        _expectAmounts(
-          a.amountFor(100),
-          energyKcal: a.energyKcal,
-          energyKj: a.energyKj,
-          proteinG: a.proteinG,
-          carbohydratesG: a.carbohydratesG,
-          fatG: a.fatG,
-        );
-      });
-      test('scales small quantity correctly', () {
-        _expectAmounts(
-          a.amountFor(2.5),
-          energyKcal: a.energyKcal / 40,
-          energyKj: a.energyKj / 40,
-          proteinG: a.proteinG / 40,
-          carbohydratesG: a.carbohydratesG / 40,
-          fatG: a.fatG / 40,
-        );
-      });
-      test('gives zero for zero quantity', () {
-        expect(a.amountFor(0), NutrientAmounts.zero);
-      });
-      test('throw error for negative quantity', () {
-        expect(() => a.amountFor(-1), throwsArgumentError);
-      });
-    });
+
     group('on Iterable', () {
       test('returns zero for an empty list', () {
         expect(<NutrientAmounts>[].sum(), NutrientAmounts.zero);
@@ -186,7 +119,7 @@ void main() {
           _amounts(kcal: 50, kj: 209, protein: 7, carbs: 8, fat: 9),
         ];
 
-        _expectAmounts(
+        expectAmounts(
           items.sum(),
           energyKcal: 350,
           energyKj: 1464,
