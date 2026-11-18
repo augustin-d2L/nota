@@ -1,5 +1,6 @@
 import 'package:nota/domain/nutrition/energy.dart';
 import 'package:nota/domain/nutrition/nutrient_validation.dart';
+import 'package:nota/domain/nutrition/nutrient_amount.dart';
 
 final class NutritionFacts {
   NutritionFacts({
@@ -52,6 +53,20 @@ final class NutritionFacts {
   final double proteinG;
   final double carbohydratesG;
   final double fatG;
+
+  /// Returns the nutrients contained in [quantity] of this food,
+  /// expressed in the food's reference unit (g or ml).
+  NutrientAmounts amountFor(double quantity) {
+    checkNutrientValue(quantity, 'quantity');
+    final factor = quantity / 100;
+    return NutrientAmounts(
+      energyKcal: energyKcal * factor,
+      energyKj: energyKj * factor,
+      proteinG: proteinG * factor,
+      carbohydratesG: carbohydratesG * factor,
+      fatG: fatG * factor,
+    );
+  }
 
   @override
   bool operator ==(Object other) =>

@@ -29,19 +29,6 @@ final class NutrientAmounts {
   final double carbohydratesG;
   final double fatG;
 
-  /// Returns the nutrients contained in [quantity] of this food,
-  /// expressed in the food's reference unit (g or ml).
-  NutrientAmounts amountFor(double quantity) {
-    checkNutrientValue(quantity, 'quantity');
-    return NutrientAmounts(
-      energyKcal: energyKcal * (quantity / 100),
-      energyKj: energyKj * (quantity / 100),
-      proteinG: proteinG * (quantity / 100),
-      carbohydratesG: carbohydratesG * (quantity / 100),
-      fatG: fatG * (quantity / 100),
-    );
-  }
-
   @override
   bool operator ==(Object other) =>
       other is NutrientAmounts &&
