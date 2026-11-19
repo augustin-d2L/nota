@@ -7,22 +7,20 @@ void main() {
     test('converts 100 kcal to 418.4 kJ', () {
       expect(kcalToKj(100), closeTo(418.4, 1e-9));
     });
+
+    test('converts 0 kcal to 0 kj', () {
+      expect(kcalToKj(0), 0);
+    });
   });
 
-  group('kjToKcal', () {
+  group('kcalToKj', () {
     test('converts 418.4 kj to 100 kcal', () {
       expect(kjToKcal(418.4), closeTo(100, 1e-9));
     });
   });
 
-  group('0kcalto0kj', () {
-    test('0 kcal is 0 kj', () {
-      expect(kcalToKj(0), 0);
-    });
-  });
-
-  group('comeAndGo', () {
-    test('100 kcal to kj to kcal is 100', () {
+  group('round trip', () {
+    test('kcal to kJ and back returns the original value', () {
       expect(kjToKcal(kcalToKj(100)), closeTo(100, 1e-9));
     });
   });
