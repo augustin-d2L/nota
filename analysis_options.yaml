@@ -18,3 +18,5 @@ linter:
     - prefer_final_locals
     - prefer_single_quotes
     - always_declare_return_types
+    - always_use_package_imports
+    - directives_ordering

@@ -1,6 +1,6 @@
 import 'package:nota/domain/nutrition/energy.dart';
-import 'package:nota/domain/nutrition/nutrient_validation.dart';
 import 'package:nota/domain/nutrition/nutrient_amounts.dart';
+import 'package:nota/domain/nutrition/nutrient_validation.dart';
 
 final class NutritionFacts {
   NutritionFacts({
