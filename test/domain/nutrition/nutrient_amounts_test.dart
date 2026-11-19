@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nota/domain/nutrition/nutrient_amount.dart';
+import 'package:nota/domain/nutrition/nutrient_amounts.dart';
 
 import 'nutrient_matchers.dart';
 

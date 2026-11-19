@@ -1,6 +1,6 @@
 import 'package:nota/domain/nutrition/energy.dart';
 import 'package:nota/domain/nutrition/nutrient_validation.dart';
-import 'package:nota/domain/nutrition/nutrient_amount.dart';
+import 'package:nota/domain/nutrition/nutrient_amounts.dart';
 
 final class NutritionFacts {
   NutritionFacts({
@@ -29,6 +29,9 @@ final class NutritionFacts {
     required double fatG,
   }) {
     checkNutrientValue(per, 'per');
+    if (per == 0) {
+      throw ArgumentError.value(per, 'per', 'must be > 0');
+    }
 
     final (kcal, kj) = switch ((energyKcal, energyKj)) {
       (final c?, final j?) => (c, j),
