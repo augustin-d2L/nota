@@ -13,7 +13,7 @@ void main() {
     });
   });
 
-  group('kcalToKj', () {
+  group('kjToKcal', () {
     test('converts 418.4 kj to 100 kcal', () {
       expect(kjToKcal(418.4), closeTo(100, 1e-9));
     });
