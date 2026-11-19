@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nota/domain/nutrition/nutrition_facts.dart';
-import 'package:nota/domain/nutrition/nutrient_amount.dart';
+import 'package:nota/domain/nutrition/nutrient_amounts.dart';
 
 const _tolerance = 1e-9;
 

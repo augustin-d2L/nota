@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nota/domain/nutrition/nutrient_amount.dart';
+import 'package:nota/domain/nutrition/nutrient_amounts.dart';
 import 'package:nota/domain/nutrition/nutrition_facts.dart';
 
 import 'nutrient_matchers.dart';
@@ -185,7 +185,9 @@ void main() {
                 fatG: 10,
                 energyKcal: 500,
               ),
-              throwsArgumentError,
+              throwsA(
+                isA<ArgumentError>().having((e) => e.name, 'name', 'per'),
+              ),
             );
           });
         }
