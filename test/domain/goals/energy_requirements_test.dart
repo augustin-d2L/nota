@@ -68,10 +68,12 @@ void main() {
 
     for (final MapEntry(key: sex, value: expected)
         in _expectedBmrBySex.entries) {
-      test('computes $expected kcal for the reference profile as ${sex.name}',
-          () {
-        expect(_bmr(sex: sex), closeTo(expected, _tolerance));
-      });
+      test(
+        'computes $expected kcal for the reference profile as ${sex.name}',
+        () {
+          expect(_bmr(sex: sex), closeTo(expected, _tolerance));
+        },
+      );
     }
 
     test('places unspecified halfway between male and female', () {
