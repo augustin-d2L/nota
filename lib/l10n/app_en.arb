@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Nota",
+  "@appTitle": {
+    "description": "App name, shown in the task switcher."
+  },
+
+  "homeEmptyMessage": "Nothing logged yet today.",
+  "@homeEmptyMessage": {
+    "description": "Home screen, when the day has no entries."
+  }
+}
