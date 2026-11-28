@@ -18,7 +18,10 @@ void main() {
 
       await tester.pumpWidget(const NotaApp());
 
-      expect(find.text("Rien de noté aujourd'hui pour l'instant."), findsOneWidget);
+      expect(
+        find.text("Rien de noté aujourd'hui pour l'instant."),
+        findsOneWidget,
+      );
     });
   });
 }
