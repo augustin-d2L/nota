@@ -20,6 +20,7 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
+      - run: flutter gen-l10n
 
       - name: Ensure domain layer is pure Dart
         run: |
